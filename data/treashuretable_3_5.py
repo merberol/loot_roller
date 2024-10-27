@@ -1,5 +1,8 @@
 
-from data import dice 
+from data import dice
+from collections import Counter
+from random import choice
+from utils.map_list import MapList
 
 
 TREASHURE_START = {
@@ -442,13 +445,55 @@ MUNDANE_ITEMS = {
 
 
 ART_OBJECTS = {
-    "(1,10)"        : {
+    "(1,10)" : {
         "VALUE": "1 d1 * 1 gp", 
         "EXAMPLES": ["Silver ewer", "Carved Bone or ivory statuette", "Finely wrought small gold bracelet"]
     },
-
+    "(11,25)" : {
+        "VALUE": "3 d6  * 1 gp",
+        "EXAMPLES" : ["Cloth of gold vestments", "black velvet mask with numerous citrines", "silver chalice with lapis lazuli gems"]
+    },
+    "(26,40)" : {
+        "VALUE": "1 d6  * 10 gp",
+        "EXAMPLES" : ["Large well-done wool tapestry" "brass mug with jade inlays"]
+    },
+    "(41,50)" : {
+        "VALUE": "1 d10 * 10 gp",
+        "EXAMPLES" : ["Silver comb with moonstones", "silver-plated steel longsword with jet jewel in hilt"]
+    },
+    "(51,60)"   : {
+        "VALUE": "2 d6  * 10 gp ",
+        "EXAMPLES" : ["Carved harp of exotic wood with ivory inlay and zircon gems", "solid gold idol (10 lb.)"]
+    },
+    "(61,70)"   : {
+        "VALUE": "3 d6  * 10 gp ",
+        "EXAMPLES" : ["Gold dragon comb with red garnet eye", "gold and topaz bottle stopper cork", "ceremonial electrum dagger with a star ruby in the pommel"]
+    },
+    "(71,80)"   : {
+        "VALUE": "4 d6  * 10 gp ",
+        "EXAMPLES" : ["Eyepatch with mock eye of sapphire and moonstone", "fire opal pendant on a fine gold chain", "old masterpiece painting"]
+    },
+    "(81,85)"   : {
+        "VALUE": "5 d6  * 10 gp ",
+        "EXAMPLES" : ["Embroidered silk and velvet mantle with numerous moonstones", "sapphire pendant on gold chain"]
+    },
+    "(86,90)"   : {
+        "VALUE": "1 d4  * 100 gp",
+        "EXAMPLES" : ["Embroidered and bejeweled glove", "jeweled anklet", "gold music box"]
+    },
+    "(91,95)"   : {
+        "VALUE": "1 d6  * 100 gp",
+        "EXAMPLES" : ["Golden circlet with four aquamarines", "a string of small pink pearls (necklace)"]
+    },
+    "(96,99)"   : {
+        "VALUE": "2 d4  * 100 gp",
+        "EXAMPLES" : ["Jeweled gold crown", "jeweled electrum ring"]
+    },
+    "(100,100)" : {
+        "VALUE": "2 d6  * 100 gp",
+        "EXAMPLES" : ["Gold and ruby ring", "gold cup set with emeralds"]
+    }
 }
-
 
 GEMS = {
     "(1,25)" : {
@@ -501,12 +546,12 @@ def roll_table(table):
 
 
 def handle_coins(coins : str):
-    print("Handlings Coins")
+    # print("Handlings Coins")
     if coins == "NONE":
         return coins
     data = coins.split()
     assert len(data) == 5, f"{data=} is not 5 elements"
-    print(data)
+    # print(data)
 
     num_rolls = int(data[0])
     dice_type = data[1]
@@ -527,7 +572,23 @@ def handle_goods(goods : str):
     goods_type = data[2]
 
     num_goods = dice.roll_dice(dice_type, num_dice)
-
+    table = None
+    match goods_type:
+        case "art":
+            print("doing art")
+            table = ART_OBJECTS
+                
+        case "gems":
+            print("doing gems")
+            table = GEMS
+    
+    goods : MapList = MapList()
+    for _ in range(num_goods):
+        goods_item_data = roll_table(ART_OBJECTS)
+        value = handle_coins(goods_item_data.get("VALUE"))
+        item = choice(goods_item_data.get('EXAMPLES'))
+        print(value, item)
+        goods.add(item, value)
 
     return goods
  
@@ -536,10 +597,8 @@ def handle_items(items : str):
     print(f"handling {items=}")
     if items == "NONE":
         return items
-    
+
     return items
-
-
 
 
 def roll_random_treasure(treasure_level):
@@ -548,10 +607,10 @@ def roll_random_treasure(treasure_level):
     for key, value in table.items():
         # print("rolling for " + key)
         res[key] = roll_table(value)
-    
+
     coins = handle_coins(res["COINS"])
     print(f"{coins=}")
     goods = handle_goods(res["GOODS"])
     print(f"{goods=}")
     items = handle_items(res["ITEMS"])
-    return f"***************************\n* {coins=}\n* {goods=}\n* {items=}\n***************************"
+    return {"COINS":coins, "GOODS":goods, "ITEMS":items}
