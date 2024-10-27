@@ -1,3 +1,7 @@
+
+from data import dice 
+
+
 TREASHURE_START = {
     1:{
         "COINS":{
@@ -439,9 +443,115 @@ MUNDANE_ITEMS = {
 
 ART_OBJECTS = {
     "(1,10)"        : {
-        "VALUE": "1 d1 * 10 gp", 
-        "AVERAGE": "55 gp", 
+        "VALUE": "1 d1 * 1 gp", 
         "EXAMPLES": ["Silver ewer", "Carved Bone or ivory statuette", "Finely wrought small gold bracelet"]
     },
 
 }
+
+
+GEMS = {
+    "(1,25)" : {
+        "VALUE" : "4 d4 * 1 sp", 
+        "EXAMPLES" : ["Banded eye or moss agate", "azurite", "blue quartz", "hematite", "lapis lazuli", "malachite", "obsidian", "rhodochrosite", "tiger eye", "turquoise", "freshwater (irregular) pearl"]
+    },
+    "(26,50)" : {
+        "VALUE" : "2 d4 * 1 gp", 
+        "EXAMPLES" :  ["Bloodstone" , "carnelian", "chalcedony", "chrysoprase", "citrine", "iolite jasper", "moonstone", "onyx", "peridot", "rock crystal (clear quartz)", "sard", "sardonyx", "rose or smoky or star rose ; quartz", "zircon"]
+    },
+    "(51,70)" : {
+        "VALUE": "4 d4 * 1 gp", 
+        "EXAMPLES" : ["Amber", "amethyst", "chrysoberyl", "coral", "red or brown-green ; garnet", "jade", "jet", "white or golden or pink or silver ; pearl", "red or red-brown or deep green ; spinel", "tourmaline"]
+    },
+    "(71,90)" : {
+        "VALUE": "2 d4 * 10 gp  ",
+        "EXAMPLES" :  ["Alexandrite", "aquamarine", "violet garnet", "black pearl", "deep blue spinel", "golden yellow topaz"]
+    },
+    "(91,99)" : {
+        "VALUE": "4 d4 * 10 gp",
+        "EXAMPLES" :  ["Emerald", "white or black or fire ; opal", "blue sapphire", "fiery yellow or rich purple ; corundum", "blue or black ; star sapphire", "star ruby"]
+    },
+    "(100,100)" : {
+        "VALUE": "2 d4 * 100 gp",
+        "EXAMPLES" :  ["Clearest bright green emerald", "blue-white or canary or pink or brown or blue ; diamond", "jacinth"]
+    }
+}
+
+
+
+
+def is_in(a_string : str, roll : int) -> bool:
+    val = eval(a_string)
+    assert isinstance(val, tuple), "val is not tuple something went wrong"
+    if not val:
+        return False
+    res = val[0] <= roll and roll <= val[1]
+    return res
+
+
+def roll_table(table):
+    roll = dice.roll_dice("d100")
+    # print(roll)
+    for cand , val in table.items():
+        if is_in(cand, roll):
+            return  val
+    else:
+        print("Something went wrong", table)
+        exit()
+
+
+def handle_coins(coins : str):
+    print("Handlings Coins")
+    if coins == "NONE":
+        return coins
+    data = coins.split()
+    assert len(data) == 5, f"{data=} is not 5 elements"
+    print(data)
+
+    num_rolls = int(data[0])
+    dice_type = data[1]
+    times = int(data[3])
+    coin_type = data[4]
+
+    num_coins = dice.roll_dice(dice_type, num_rolls, times)
+    return f"{num_coins} {coin_type}"
+
+
+def handle_goods(goods : str):
+    print(f"handling {goods=}")
+    if goods == "NONE":
+        return goods
+    data = goods.split()
+    num_dice = int(data[0])
+    dice_type = data[1]
+    goods_type = data[2]
+
+    num_goods = dice.roll_dice(dice_type, num_dice)
+
+
+    return goods
+ 
+
+def handle_items(items : str):
+    print(f"handling {items=}")
+    if items == "NONE":
+        return items
+    
+    return items
+
+
+
+
+def roll_random_treasure(treasure_level):
+    res = {}
+    table = TREASHURE_START[treasure_level]
+    for key, value in table.items():
+        # print("rolling for " + key)
+        res[key] = roll_table(value)
+    
+    coins = handle_coins(res["COINS"])
+    print(f"{coins=}")
+    goods = handle_goods(res["GOODS"])
+    print(f"{goods=}")
+    items = handle_items(res["ITEMS"])
+    return f"***************************\n* {coins=}\n* {goods=}\n* {items=}\n***************************"
