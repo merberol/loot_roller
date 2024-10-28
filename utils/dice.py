@@ -37,6 +37,10 @@ def _roll_n_type(num_rolls : int , num_sides : int, times : int = 1):
 
 def roll_dice(dice_type : str, num_rolls : int = 1, times : int = 1):
     match dice_type:
+        case "d2":
+            return _roll_n_type(num_rolls, 2, times)
+        case "d3":
+            return _roll_n_type(num_rolls, 3, times)
         case "d4":
             return _roll_n_type(num_rolls, 4, times)
             
@@ -57,4 +61,6 @@ def roll_dice(dice_type : str, num_rolls : int = 1, times : int = 1):
             
         case "d100":
             return _roll_n_type(num_rolls, 100, times)
+        
+    print(f"ERROR Unknown {dice_type=}")
             
