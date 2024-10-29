@@ -258,7 +258,7 @@ WEAPONS_MAJOR = {
 }
 
 
-def roll_weapon(result : MapList, specific_item_data, weapons_table, spec_ability_table):
+def roll_weapon(result : MapList, specific_item_data, weapons_table, spec_ability_table) -> bool:
     item_data = roll_table(weapons_table)
     spec_abilities = []
     if item_data["NAME"] == "Special ability and roll again":
@@ -283,8 +283,11 @@ def roll_weapon(result : MapList, specific_item_data, weapons_table, spec_abilit
     specific_item_data["VALUE"] = add_coins(item_value, specific_item_data["VALUE"])
 
     print(specific_item_data)
-    item_data =  add_spec_abilities(specific_item_data, spec_abilities)
-    result.add(item_data["NAME"], item_data["VALUE"])
+    res, item_data = add_spec_abilities(specific_item_data, spec_abilities, WEAPON_COSTS_BY_BONUS)
+    if not res:
+        return res
+    result.add(item_data["NAME"], item_data["VALUE"],)
+    return True
 
 
 def roll_weapon_minor(result : MapList):
@@ -297,9 +300,10 @@ def roll_weapon_minor(result : MapList):
         spec_item_table = RANGED_WEAPON_SPECIAL_ABILITIES_MINOR
     
     mundane_weapon_type = roll_table(mundane_weapon_type["VALUE"])
-    roll_weapon(result, mundane_weapon_type, WEAPONS_MINOR, spec_item_table)
-
-
+    res = False
+    while not res:
+        res = roll_weapon(result, mundane_weapon_type, WEAPONS_MINOR, spec_item_table)
+    
 def roll_weapon_medium(result : MapList):
     mundane_weapon_type = roll_table(MUNDANE_WEAPONS)
     spec_item_table = None
@@ -309,7 +313,9 @@ def roll_weapon_medium(result : MapList):
         spec_item_table = RANGED_WEAPON_SPECIAL_ABILITIES_MEDIUM
     
     mundane_weapon_type = roll_table(mundane_weapon_type["VALUE"])
-    roll_weapon(result, mundane_weapon_type, WEAPONS_MINOR, spec_item_table)
+    res = False
+    while not res:
+        res = roll_weapon(result, mundane_weapon_type, WEAPONS_MINOR, spec_item_table)
 
 
 def roll_weapon_major(result : MapList):
@@ -321,4 +327,6 @@ def roll_weapon_major(result : MapList):
         spec_item_table = RANGED_WEAPON_SPECIAL_ABILITIES_MAJOR
     
     mundane_weapon_type = roll_table(mundane_weapon_type["VALUE"])
-    roll_weapon(result, mundane_weapon_type, WEAPONS_MINOR, spec_item_table)
+    res = False
+    while not res:
+        res = roll_weapon(result, mundane_weapon_type, WEAPONS_MINOR, spec_item_table)

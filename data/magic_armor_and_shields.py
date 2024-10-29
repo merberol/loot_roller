@@ -2,6 +2,19 @@
 from utils.utils import roll_table, add_coins, add_spec_abilities, special_ability_and_roll_again
 from utils.map_list import MapList
 
+ARMOR_COSTS_BY_BONUS = {
+"+1" : "100 gp",
+"+2" : "400 gp",
+"+3" : "900 gp",
+"+4" : "1600 gp",
+"+5" : "2500 gp",
+"+6" : "3600 gp",
+"+7" : "4900 gp",
+"+8" : "6400 gp",
+"+9" : "8100 gp",
+"+10" : "10000 gp"
+}
+
 SPECIFIC_ARMOR_MINOR = {
     "(1,50)"  : {"NAME" : "Mithral shirt",    "VALUE" : "110 gp"},
     "(51,80)"  : {"NAME" : "Dragonhide plate", "VALUE" : "330 gp"},
@@ -190,7 +203,7 @@ ARMOR_AND_SHIELD_MINOR = {
 
 
 
-def roll_armor_and_shield(result : MapList, spec_item_table, armor_and_shield_table):
+def roll_armor_and_shield(result : MapList, spec_item_table, armor_and_shield_table) -> bool:
     item_data = roll_table(armor_and_shield_table)
     spec_abilities = []
     if item_data["NAME"] == "Special ability and roll again":
@@ -226,18 +239,28 @@ def roll_armor_and_shield(result : MapList, spec_item_table, armor_and_shield_ta
         specific_item_data["VALUE"] = add_coins(item_value, specific_item_data["VALUE"])
 
         print(specific_item_data)
-        item_data =  add_spec_abilities(specific_item_data, spec_abilities)
+        res, item_data = add_spec_abilities(specific_item_data, spec_abilities , ARMOR_COSTS_BY_BONUS)
+        if not res:
+            return False
+        print(item_data)
         result.add(item_data["NAME"], item_data["VALUE"])
+        return True
 
 
 def roll_armor_and_shield_minor(result : MapList):
-    roll_armor_and_shield(result, ARMOR_SPECIAL_ABILITY_MINOR, ARMOR_AND_SHIELD_MINOR)
+    res = False
+    while not res:
+        res = roll_armor_and_shield(result, ARMOR_SPECIAL_ABILITY_MINOR, ARMOR_AND_SHIELD_MINOR)
     
 def roll_armor_and_shield_medium(result : MapList):
-    roll_armor_and_shield(result, ARMOR_SPECIAL_ABILITY_MEDIUM, ARMOR_AND_SHIELD_MEDIUM)
+    res = False
+    while not res:
+        res = roll_armor_and_shield(result, ARMOR_SPECIAL_ABILITY_MEDIUM, ARMOR_AND_SHIELD_MEDIUM)
     
 def roll_armor_and_shield_major(result : MapList):
-    roll_armor_and_shield(result, ARMOR_SPECIAL_ABILITY_MAJOR, ARMOR_AND_SHIELD_MAJOR)
+    res = False
+    while not res:
+        res = roll_armor_and_shield(result, ARMOR_SPECIAL_ABILITY_MAJOR, ARMOR_AND_SHIELD_MAJOR)
     
 
 

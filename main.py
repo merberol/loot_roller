@@ -26,6 +26,7 @@ def parse_goods(goods_data):
 
 
 def parse_items(items_data):
+    print(f"{items_data=}")
     if items_data == "NONE":
         return f"*    {items_data}\n*"
     out = "*    "

@@ -10,7 +10,7 @@ def is_in(a_string : str, roll : int) -> bool:
 
 
 def roll_table(table):
-    roll = dice.roll_dice("d100", 1, 1)
+    roll = dice.roll_dice("d100")
     # print(roll)
     for cand , val in table.items():
         if is_in(cand, roll):
@@ -36,22 +36,107 @@ def handle_coins(coins : str):
     num_coins = dice.roll_dice(dice_type, num_rolls, times)
     return f"{num_coins} {coin_type}"
 
+def round_coins(cp_value : int):
+    sp_value = cp_value // 10
+    cp_value = cp_value - sp_value * 10
+
+    gp_value = sp_value // 10 
+    sp_value = sp_value - gp_value * 10
+
+    out = "" if not gp_value else f"{gp_value} gp"
+    if sp_value:
+        out += f" {sp_value} sp"
+    if cp_value:
+        out += f" {cp_value} cp"
+    return out
+
+
 def add_coins(a_value : str, b_value: str):
     print(f"adding {a_value=} to {b_value=}")
-    a_value = a_value.split()
-    b_value = b_value.split()
+    a_value = convert_coins_to_cp(a_value)
+    b_value = convert_coins_to_cp(b_value)
 
-    if a_value[1] == b_value[1]:
-        return f"{int(a_value[0]) + int(b_value[0])} {a_value[1]}"
+    return round_coins(a_value + b_value)
+
+
+def convert_coins_to_cp(val : str) -> int:
+    raw_val = int(val.split()[0])
+
+    match (val.split()[1]):
+        case "cp":
+            return raw_val
+        case "sp":
+            return raw_val * 10
+        case "gp":
+            return raw_val * 100
     
-    print(f"UNEXPECTTED EXIT!! {a_value=}, {b_value=}")
+    print(f"UNEXPECTTED EXIT!! {val=}")
     exit()
 
 
-def add_spec_abilities(item_data, spec_abilities):
+
+def subtract_coins(a_val : str, b_val : str):
+    print(f"subtracting {b_val=} from {a_val=}")
+
+    # convert to coppers
+    a_as_cp = convert_coins_to_cp(a_val)
+    b_as_cp = convert_coins_to_cp(b_val)
+    res = a_as_cp - b_as_cp
+    print(f"res of subraction : {res=}")
+    return res
+
+
+
+
+
+def handle_bonus_value(ability_bonus_str, item_data, bonus_cost_table):
+    ability_bonus_str = ability_bonus_str.split()[0]
+    current_bonus = item_data["NAME"].split()[0]
+    new_bonus = int(current_bonus[1:]) + int(ability_bonus_str[1:])
+    print(f"{new_bonus=}")
+    if new_bonus > 10:
+        return False, item_data
+    new_bonus_str = f"+{new_bonus}"
+    print(f"{new_bonus_str=}")
+    new_value_as_cp = convert_coins_to_cp(bonus_cost_table[new_bonus_str])
+    print(f"{new_value_as_cp=}")
+    current_bonus_value = bonus_cost_table[current_bonus]
+    print(f"{current_bonus_value=}")
+    difference = subtract_coins(item_data["VALUE"], current_bonus_value)
+    print(f"{difference=}")
+
+    new_value = round_coins(new_value_as_cp + difference)
+    print(f"{new_value=}")
+    item_data["VALUE"] = new_value
+
+    return True , item_data
+
+
+def add_spec_abilities(item_data, spec_abilities, bonus_cost_table):
     print(f"adding {spec_abilities=} to {item_data=}")
-    exit()
-    return item_data
+    if not spec_abilities:
+        print("NO spec abilities ")
+        return True, item_data
+    
+
+    ability_names = []
+    for ability in spec_abilities:
+        ability_names.append(ability["NAME"])
+        ability_value = ability["VALUE"]
+        if "+" in ability_value:
+            res, item_data = handle_bonus_value(ability_value, item_data, bonus_cost_table)
+            if not res:
+                return False, item_data
+        else:
+            new_value = add_coins(item_data["VALUE"], ability_value)
+            print(f"{new_value=}")
+            item_data["VALUE"] = new_value
+    
+    item_data["NAME"] += " of " + ability_names[0]
+    for name in ability_names[1:]:
+        item_data["NAME"] += " and " + name 
+
+    return True, item_data
 
 
 def roll_spec_ability(table):
