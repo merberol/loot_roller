@@ -35,11 +35,7 @@ MUNDANE_ARMOR = {
     "(91,100)"      : {"NAME": "Masterwork Shield", "VALUE" : MASTER_WORK_SHIELDS}, 
 }
 
-MUNDANE_WEAPONS = {
-    "(1,50)"        : COMMON_MELEE_WEAPON, 
-    "(51,70)"       : UNCOMMON_MELEE_WEAPON,
-    "(71,100)"      : COMMON_RANGED_WEAPON
-}
+
 
 TOOLS_AND_GEAR = {
     "(1,3)"         : {"NAME":"Backpack, empty", "VALUE": "2 sp"},
@@ -65,7 +61,7 @@ TOOLS_AND_GEAR = {
 }
 
 MUNDANE_ITEMS = {
-    "(1,17)"        : "ALCHEMICAL_ITEM",
+    "(1,170)"        : "ALCHEMICAL_ITEM",
     "(18,50)"       : "ARMOR",
     "(51,83)"       : "WEAPONS",
     "(84,100)"      : "TOOLS_AND_GEAR"
@@ -106,6 +102,7 @@ MAJOR_ITEMS = {
 }
 
 def roll_alchemical_item(result : MapList):
+    print("running roll alchemical")
     item_data = roll_table(ALCHEMICAL_ITEM)
     name = item_data.get("NAME")
     value = item_data.get("VALUE")
@@ -130,7 +127,7 @@ def roll_mundane_armor(result : MapList):
     )
 
 def roll_mundane_weapon(result : MapList):
-    item_data = roll_table(roll_table(MUNDANE_WEAPONS))
+    item_data = roll_table(roll_table(MUNDANE_WEAPONS)["VALUE"])
     if type(item_data["VALUE"]) == dict:
         print("Rolling for Ammunition")
         item_data = roll_table(item_data["VALUE"])
@@ -172,15 +169,25 @@ def roll_minor_item(num_items):
         print(item_type)
     else:
         item_type(result)
-        
+
     return result
 
 def roll_medium_item(num_items):
     print("rolling medium")
     result = MapList()
+    item_type = roll_table(MEDIUM_ITEMS)
+    if type(item_type) == str:
+        print(item_type)
+    else:
+        item_type(result)
     return result
 
 def roll_major_item(num_items):
     print("rolling major")
     result = MapList()
+    item_type = roll_table(MAJOR_ITEMS)
+    if type(item_type) == str:
+        print(item_type)
+    else:
+        item_type(result)
     return result

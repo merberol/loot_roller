@@ -35,7 +35,7 @@ def _roll_n_type(num_rolls : int , num_sides : int, times : int = 1):
     return res
 
 
-def roll_dice(dice_type : str, num_rolls : int = 1, times : int = 1):
+def roll_dice(dice_type : str, num_rolls : int, times : int):
     match dice_type:
         case "d2":
             return _roll_n_type(num_rolls, 2, times)

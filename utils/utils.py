@@ -10,7 +10,7 @@ def is_in(a_string : str, roll : int) -> bool:
 
 
 def roll_table(table):
-    roll = dice.roll_dice("d100")
+    roll = dice.roll_dice("d100", 1, 1)
     # print(roll)
     for cand , val in table.items():
         if is_in(cand, roll):
@@ -21,7 +21,7 @@ def roll_table(table):
 
 
 def handle_coins(coins : str):
-    # print("Handlings Coins")
+    print(f"Handlings Coins {coins=}")
     if coins == "NONE":
         return coins
     data = coins.split()
@@ -43,3 +43,33 @@ def add_coins(a_value : str, b_value: str):
 
     if a_value[1] == b_value[1]:
         return f"{int(a_value[0]) + int(b_value[0])} {a_value[1]}"
+    
+    print(f"UNEXPECTTED EXIT!! {a_value=}, {b_value=}")
+    exit()
+
+
+def add_spec_abilities(item_data, spec_abilities):
+    print(f"adding {spec_abilities=} to {item_data=}")
+    exit()
+    return item_data
+
+
+def roll_spec_ability(table):
+    spec_ability = roll_table(table)
+    if spec_ability["NAME"] == "Roll twice again":
+        return roll_spec_ability(table) + roll_spec_ability(table)
+    return [spec_ability] 
+
+
+def special_ability_and_roll_again(spec_table, item_table):
+    spec_abilities = roll_spec_ability(spec_table)
+    items_data = roll_table(item_table)
+    
+    if items_data["NAME"] == "Special ability and roll again":
+        data = special_ability_and_roll_again(spec_table, item_table)
+        spec_abilities.extend(data[0])
+        items_data = data[1]
+
+    print(spec_abilities)
+    print(items_data)
+    return spec_abilities, items_data

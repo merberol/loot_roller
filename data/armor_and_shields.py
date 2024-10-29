@@ -1,5 +1,5 @@
 
-from utils.utils import roll_table, add_coins
+from utils.utils import roll_table, add_coins, add_spec_abilities, special_ability_and_roll_again
 from utils.map_list import MapList
 
 SPECIFIC_ARMOR_MINOR = {
@@ -189,39 +189,25 @@ ARMOR_AND_SHIELD_MINOR = {
     "(92,100)" : {"NAME" : "Special ability and roll again"}
 }
 
-def roll_spec_ability(table):
-    spec_ability = roll_table(table)
-    if spec_ability["NAME"] == "Roll twice again":
-        return roll_spec_ability(table) + roll_spec_ability(table)
-    return [spec_ability] 
-
-
-def special_ability_and_roll_again(spec_table, item_table):
-    spec_abilities = roll_spec_ability(spec_table)
-    items_data = roll_table(item_table)
-    
-    if items_data["NAME"] == "Special ability and roll again":
-        data = special_ability_and_roll_again(ARMOR_SPECIAL_ABILITY_MINOR, ARMOR_AND_SHIELD_MINOR)
-        spec_abilities.extend(data[0])
-        items_data = data[1]
-
-    print(spec_abilities)
-    print(items_data)
-    return spec_abilities, items_data
 
 
 
-def roll_armor_and_shield_minor(result : MapList):
-    item_data = roll_table(ARMOR_AND_SHIELD_MINOR)
+
+def roll_armor_and_shield(result : MapList, spec_item_table, armor_and_shield_table):
+    item_data = roll_table(armor_and_shield_table)
     spec_abilities = []
     if item_data["NAME"] == "Special ability and roll again":
-        data = special_ability_and_roll_again(ARMOR_SPECIAL_ABILITY_MINOR, ARMOR_AND_SHIELD_MINOR)
+        data = special_ability_and_roll_again(spec_item_table, armor_and_shield_table)
         spec_abilities = data[0]
         item_data = data[1]
 
     if type(item_data["VALUE"]) == dict:
         print("Rolling for spcific item")
         item_data = roll_table(item_data["VALUE"])
+        if spec_abilities:
+           item_data =  add_spec_abilities(item_data, spec_abilities)
+        result.add(item_data["NAME"], item_data["VALUE"])
+        return
 
     # print(spec_abilities, item_data)
 
@@ -229,18 +215,27 @@ def roll_armor_and_shield_minor(result : MapList):
     item_value = item_data["VALUE"]
     bonus = item_name.split()[0]
     item_type = item_name.split()[1]
+    specific_item_data = None
+
     match item_type:
         case "armor":
             specific_item_data = roll_table(RANDOM_ARMOR_TYPE)
         case "shield":
             specific_item_data = roll_table(RANDOM_SHIELD_TYPE)
 
-    print(f"{specific_item_data=}")
-    specific_item_data["NAME"] = bonus + " " + specific_item_data["NAME"]
-    specific_item_data["VALUE"] = add_coins(item_value, specific_item_data["VALUE"])
-    specific_item_data["SPEC"] = spec_abilities
+    if specific_item_data is not None:
+        print(f"{specific_item_data=}")
+        specific_item_data["NAME"] = bonus + " " + specific_item_data["NAME"]
+        specific_item_data["VALUE"] = add_coins(item_value, specific_item_data["VALUE"])
 
-    print(specific_item_data)
+        print(specific_item_data)
+        item_data =  add_spec_abilities(specific_item_data, spec_abilities)
+        result.add(item_data["NAME"], item_data["VALUE"])
+
+
+def roll_armor_and_shield_minor(result : MapList):
+    roll_armor_and_shield(result, ARMOR_SPECIAL_ABILITY_MINOR, ARMOR_AND_SHIELD_MINOR)
+    
 
 
 

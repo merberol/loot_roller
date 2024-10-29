@@ -3,6 +3,7 @@ class MapList:
         self._table : dict[str, list] = dict()
     
     def add(self, key : str, value):
+        print("adding " + key + " to " + repr(self._table))
         if key in self._table.keys():
             self._table[key].append(value)
             return

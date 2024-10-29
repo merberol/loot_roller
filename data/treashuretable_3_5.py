@@ -204,7 +204,7 @@ def handle_goods(goods : str):
     if len(data) == 3:
         num_dice = int(data[0])
         dice_type = data[1]
-        num_goods = roll_dice(dice_type, num_dice)
+        num_goods = roll_dice(dice_type, num_dice, 1)
         goods_type = data[2]
     elif len(data) == 2:
         num_goods = int(data[0])
@@ -239,7 +239,7 @@ def handle_items(items : str):
 
     if len(item_as_list) == 3:
         num_dice, dice_type, item_type  = item_as_list
-        num_items = roll_dice(dice_type, int(num_dice))
+        num_items = roll_dice(dice_type, int(num_dice), 1)
     elif len(item_as_list) == 2:
         num_items, item_type = item_as_list
     else:
