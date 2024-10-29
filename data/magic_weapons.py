@@ -2,6 +2,19 @@ from data.weapons import *
 from utils.map_list import MapList
 from utils.utils import roll_table, add_coins, add_spec_abilities, special_ability_and_roll_again
 
+WEAPON_COSTS_BY_BONUS = {
+    "+1" : "200 gp",
+    "+2" : "800 gp",
+    "+3" : "1800 gp",
+    "+4" : "3200 gp",
+    "+5" : "5000 gp",
+    "+6" : "7200 gp",
+    "+7" : "9800 gp",
+    "+8" : "12800 gp",
+    "+9" : "16200 gp",
+    "+10" : "20000 gp"
+}
+
 DESIGNATED_FOE_TABLE = {
     "(1,5)"	: "Aberrations",
     "(6,9)"	: "Animals",
