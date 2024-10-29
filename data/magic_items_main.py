@@ -63,7 +63,7 @@ def roll_medium_item(num_items):
 def roll_major_item(num_items):
     print("rolling major")
     result = MapList()
-    for _ in range(num_items)
+    for _ in range(num_items):
         item_type = roll_table(MAJOR_ITEMS)
         if type(item_type) == str:
             print(item_type)
