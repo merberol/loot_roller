@@ -83,3 +83,9 @@ COMMON_RANGED_WEAPON = {
     "(91,95)" : {"NAME" : "Longbow, composite (+3 Str bonus)", "VALUE" : "70 gp"},
     "(96,100)" : {"NAME" : "Longbow, composite (+4 Str bonus)", "VALUE" : "80 gp"}
 }
+
+MUNDANE_WEAPONS = {
+    "(1,50)"        : {"NAME" : "common melee weapon", "VALUE" : COMMON_MELEE_WEAPON}, 
+    "(51,70)"       : {"NAME" : "uncommon melee weapon", "VALUE" : UNCOMMON_MELEE_WEAPON},
+    "(71,100)"      : {"NAME" : "common ranged weapon", "VALUE" : COMMON_RANGED_WEAPON}
+}
