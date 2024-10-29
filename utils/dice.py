@@ -35,7 +35,8 @@ def _roll_n_type(num_rolls : int , num_sides : int, times : int = 1):
     return res
 
 
-def roll_dice(dice_type : str, num_rolls : int, times : int):
+def roll_dice(dice_type : str, num_rolls : int = 1, times : int = 1):
+    """Function to roll a specidies die"""
     match dice_type:
         case "d2":
             return _roll_n_type(num_rolls, 2, times)
@@ -43,24 +44,18 @@ def roll_dice(dice_type : str, num_rolls : int, times : int):
             return _roll_n_type(num_rolls, 3, times)
         case "d4":
             return _roll_n_type(num_rolls, 4, times)
-            
         case "d6":
             return _roll_n_type(num_rolls, 6, times)
-            
         case "d8":
             return _roll_n_type(num_rolls, 8, times)
-            
         case "d10":
             return _roll_n_type(num_rolls, 10,times)
-            
         case "d12":
             return _roll_n_type(num_rolls, 12, times)
-            
         case "d20":
             return _roll_n_type(num_rolls, 20, times)
-            
         case "d100":
             return _roll_n_type(num_rolls, 100, times)
-        
+
     print(f"ERROR Unknown {dice_type=}")
             

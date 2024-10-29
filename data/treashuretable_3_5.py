@@ -3,7 +3,7 @@ from utils.dice import roll_dice
 from utils.utils import roll_table, handle_coins
 from random import choice
 from utils.map_list import MapList
-from data.items import roll_mundane_item, roll_minor_item, roll_medium_item, roll_major_item
+from data.mundane_items import roll_mundane_item, roll_minor_item, roll_medium_item, roll_major_item
 
 
 TREASHURE_START = {
@@ -192,10 +192,6 @@ GEMS = {
 }
 
 
-
-
-
-
 def handle_goods(goods : str):
     print(f"handling {goods=}")
     if goods == "NONE":
@@ -229,7 +225,7 @@ def handle_goods(goods : str):
         goods.add(item, value)
 
     return goods
- 
+
 
 def handle_items(items : str):
     print(f"handling {items=}")

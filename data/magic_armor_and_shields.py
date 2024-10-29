@@ -15,9 +15,6 @@ SPECIFIC_SHIELD_MINOR = {
     "(96,100)" : { "NAME" : "Caster’s shield",      "VALUE" : "3153 sp"}
 }
 
-
-
-
 SPECIFIC_ARMOR_MEDIUM = {
     "(1,25)"   : {"NAME" : "Mithral shirt",          "VALUE" : "110 gp"},
     "(26,45)"  : {"NAME" : "Dragonhide plate",       "VALUE" : "330 gp"},
@@ -235,6 +232,12 @@ def roll_armor_and_shield(result : MapList, spec_item_table, armor_and_shield_ta
 
 def roll_armor_and_shield_minor(result : MapList):
     roll_armor_and_shield(result, ARMOR_SPECIAL_ABILITY_MINOR, ARMOR_AND_SHIELD_MINOR)
+    
+def roll_armor_and_shield_medium(result : MapList):
+    roll_armor_and_shield(result, ARMOR_SPECIAL_ABILITY_MEDIUM, ARMOR_AND_SHIELD_MEDIUM)
+    
+def roll_armor_and_shield_major(result : MapList):
+    roll_armor_and_shield(result, ARMOR_SPECIAL_ABILITY_MAJOR, ARMOR_AND_SHIELD_MAJOR)
     
 
 

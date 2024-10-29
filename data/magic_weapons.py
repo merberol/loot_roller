@@ -1,4 +1,4 @@
-from data.weapons import *
+from data.mundane_weapons import *
 from utils.map_list import MapList
 from utils.utils import roll_table, add_coins, add_spec_abilities, special_ability_and_roll_again
 
@@ -277,9 +277,6 @@ def roll_weapon(result : MapList, specific_item_data, weapons_table, spec_abilit
     item_name = item_data["NAME"]
     item_value = item_data["VALUE"]
     bonus = item_name.split()[0]
-    item_type = item_name.split()[1]
-
-    # Determine weapons type
 
     print(f"{specific_item_data=}")
     specific_item_data["NAME"] = bonus + " " + specific_item_data["NAME"]

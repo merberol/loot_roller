@@ -8,7 +8,6 @@ def parse_coins(coins_data):
     return  f"*    {coins_data}\n*"
 
 
-
 def parse_goods(goods_data):
     if goods_data == "NONE":
         return "*    NONE\n*"
@@ -41,8 +40,8 @@ def parse_items(items_data):
             out += tmp + value+"\n*    "
     return out
 
-def main(level = 1):
 
+def main(level = 1):
     result = t3_5.roll_random_treasure(level)
     coins = f"* COINS:\n{
         parse_coins(result.get('COINS'))
@@ -57,6 +56,7 @@ def main(level = 1):
     out = f"{"*" * 80}\n*\n{coins}\n{goods}\n{items}\n{"*" * 80}"
 
     print(out)
+
 
 if __name__ == "__main__":
     level = int(sys.argv[1])
