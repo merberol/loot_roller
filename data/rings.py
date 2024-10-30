@@ -77,9 +77,6 @@ RINGS_MAJOR = {
 }
 
 
-
-
-
 def roll_ring(result : MapList, ring_table):
     item_data = roll_table(ring_table)
     result.add(item_data["NAME"], item_data["VALUE"])
@@ -88,8 +85,10 @@ def roll_ring(result : MapList, ring_table):
 def roll_minor_ring(result : MapList):
     roll_ring(result, RINGS_MINOR)
 
+
 def roll_medium_ring(result : MapList):
     roll_ring(result, RINGS_MEDIUM)
+
 
 def roll_major_ring(result : MapList):
     roll_ring(result, RINGS_MAJOR)
