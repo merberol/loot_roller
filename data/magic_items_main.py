@@ -1,11 +1,12 @@
 from data.magic_armor_and_shields import *
 from data.magic_weapons import *
+from data.rings import roll_minor_ring, roll_medium_ring, roll_major_ring
 
 MINOR_ITEMS = {
     "(1,14)"  : roll_armor_and_shield_minor,
     "(5,9)"  : roll_weapon_minor,
     "(10,44)"  : "Potions",
-    "(45,46)"  : "Rings",
+    "(45,46)"  : roll_minor_ring,
     "(47,81)"  : "Scrolls",
     "(82,91)"  : "Wands",
     "(92,100)" : "Wondrous items"
@@ -15,7 +16,7 @@ MEDIUM_ITEMS = {
     "(1,10)" : roll_armor_and_shield_medium,
     "(11,20)" : roll_weapon_medium,
     "(21,30)" : "Potions",
-    "(31,40)" : "Rings",
+    "(31,40)" : roll_medium_ring,
     "(41,50)" : "Rods",
     "(51,65)" : "Scrolls",
     "(66,68)" : "Staffs",
@@ -27,7 +28,7 @@ MAJOR_ITEMS = {
     "(1,10)" : roll_armor_and_shield_major,
     "(11,20)" : roll_weapon_major,
     "(21,25)" : "Potions",
-    "(26,35)" : "Rings",
+    "(26,35)" : roll_major_ring,
     "(36,45)" : "Rods",
     "(46,55)" : "Scrolls",
     "(56,75)" : "Staffs",
