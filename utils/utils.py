@@ -43,36 +43,55 @@ def round_coins(cp_value : int):
     gp_value = sp_value // 10 
     sp_value = sp_value - gp_value * 10
 
-    out = "" if not gp_value else f"{gp_value} gp"
+    pp_value = gp_value // 100
+    gp_value = gp_value - pp_value * 100
+
+
+    vals = []
+
+    if pp_value:
+        vals.append(f"{pp_value} pp")
+    if gp_value:
+        vals.append(f"{gp_value} gp")
     if sp_value:
-        out += f" {sp_value} sp"
+        vals.append(f"{sp_value} sp")
     if cp_value:
-        out += f" {cp_value} cp"
+        vals.append(f"{cp_value} cp")
+
+    out = ", ".join(vals)
+    print(f"round coins {out=}")
     return out
 
 
 def add_coins(a_value : str, b_value: str):
-    print(f"adding {a_value=} to {b_value=}")
+    # print(f"adding {a_value=} to {b_value=}")
     a_value = convert_coins_to_cp(a_value)
     b_value = convert_coins_to_cp(b_value)
 
     return round_coins(a_value + b_value)
 
 
-def convert_coins_to_cp(val : str) -> int:
-    raw_val = int(val.split()[0])
-
-    match (val.split()[1]):
+def _convertion_helper(raw_val, coin_type):
+    match (coin_type):
         case "cp":
             return raw_val
         case "sp":
             return raw_val * 10
         case "gp":
             return raw_val * 100
-    
-    print(f"UNEXPECTTED EXIT!! {val=}")
-    exit()
+        case "pp":
+            return raw_val * 10_000
 
+
+def convert_coins_to_cp(coins_str : str) -> int:
+    # print(f"converting {coins_str=} to cp")
+    result = 0
+    for val in coins_str.split(", "):
+        # print(val)
+        data = val.split()
+        result += _convertion_helper(int(data[0]), data[1])
+
+    return result
 
 
 def subtract_coins(a_val : str, b_val : str):
@@ -86,27 +105,24 @@ def subtract_coins(a_val : str, b_val : str):
     return res
 
 
-
-
-
 def handle_bonus_value(ability_bonus_str, item_data, bonus_cost_table):
     ability_bonus_str = ability_bonus_str.split()[0]
     current_bonus = item_data["NAME"].split()[0]
     new_bonus = int(current_bonus[1:]) + int(ability_bonus_str[1:])
-    print(f"{new_bonus=}")
+    # print(f"{new_bonus=}")
     if new_bonus > 10:
         return False, item_data
     new_bonus_str = f"+{new_bonus}"
-    print(f"{new_bonus_str=}")
+    # print(f"{new_bonus_str=}")
     new_value_as_cp = convert_coins_to_cp(bonus_cost_table[new_bonus_str])
-    print(f"{new_value_as_cp=}")
+    # print(f"{new_value_as_cp=}")
     current_bonus_value = bonus_cost_table[current_bonus]
-    print(f"{current_bonus_value=}")
+    # print(f"{current_bonus_value=}")
     difference = subtract_coins(item_data["VALUE"], current_bonus_value)
-    print(f"{difference=}")
+    # print(f"{difference=}")
 
     new_value = round_coins(new_value_as_cp + difference)
-    print(f"{new_value=}")
+    # print(f"{new_value=}")
     item_data["VALUE"] = new_value
 
     return True , item_data

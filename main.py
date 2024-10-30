@@ -30,9 +30,9 @@ def parse_items(items_data):
     if items_data == "NONE":
         return f"*    {items_data}\n*"
     out = "*    "
-    length = 0
+    length = 50
     for key in items_data.get_table().keys():
-        if len(key) > length:
+        if len(key) > length and "SCROLL" not in key:
             length = len(key)
     # print(length)
     for key, values in items_data.get_table().items():
