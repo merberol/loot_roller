@@ -1,6 +1,7 @@
 from data.magic_armor_and_shields import *
 from data.magic_weapons import *
-from utils.utils import roll_table, handle_coins
+from utils.utils import roll_table
+from utils.dice import roll_dice
 from utils.map_list import MapList
 from data.mundane_weapons import *
 from data.mundane_armor import roll_mundane_armor
@@ -57,10 +58,10 @@ def roll_alchemical_item(result : MapList):
         result.add(name, value)
     else:
         value_data = value.split()
-        num_items = int(value_data[0])
+        num_items = roll_dice(value_data[1] ,int(value_data[0]) )
         print(value)
         for _ in range(num_items):
-            value = handle_coins("1 " + " ".join(value_data[1:]))
+            value = " ".join(value_data[3:])
             result.add(name, value)
 
 

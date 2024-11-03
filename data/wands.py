@@ -150,7 +150,7 @@ def roll_wand(result : MapList, table):
     item_data = roll_table(table)
     # calculate number of charges
     num_charges = randint(1,50)
-    item_data["NAME"] += f" with {num_charges} charges"
+    item_data["NAME"] = "Want of " + item_data["NAME"] + f" with {num_charges} charges"
     start_value = item_data["VALUE"]
     new_value = _calc_wand_value(start_value, num_charges)
     item_data["VALUE"] = new_value
